@@ -9,15 +9,15 @@ real need to use HDF5 for small dataset such as CIFAR-10.
 
 from __future__ import division, print_function, absolute_import
 
-import tflearn
-from tflearn.layers.core import *
-from tflearn.layers.conv import *
-from tflearn.data_utils import *
-from tflearn.layers.normalization import *
-from tflearn.layers.estimator import regression
+import cctf
+from cctf.layers.core import *
+from cctf.layers.conv import *
+from cctf.data_utils import *
+from cctf.layers.normalization import *
+from cctf.layers.estimator import regression
 
 # CIFAR-10 Dataset
-from tflearn.datasets import cifar10
+from cctf.datasets import cifar10
 (X, Y), (X_test, Y_test) = cifar10.load_data()
 Y = to_categorical(Y, 10)
 Y_test = to_categorical(Y_test, 10)
@@ -53,8 +53,9 @@ network = regression(network, optimizer='adam',
                      learning_rate=0.001)
 
 # Training
-model = tflearn.DNN(network, tensorboard_verbose=0)
-model.fit(X, Y, n_epoch=50, shuffle=True, validation_set=(X_test, Y_test),
+model = cctf.DNN(network, tensorboard_verbose=0)
+#model.fit(X, Y, n_epoch=50, shuffle=True, validation_set=(X_test, Y_test),
+model.fit(X, Y, n_epoch=3, shuffle=True, validation_set=(X_test, Y_test),
           show_metric=True, batch_size=96, run_id='cifar10_cnn')
 
 h5f.close()

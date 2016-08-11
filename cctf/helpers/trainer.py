@@ -726,7 +726,7 @@ class TrainOp(object):
 
         # Calculate validation
         if snapshot and self.val_feed_dict:
-            tflearn.is_training(False, session=self.session)
+            cctf.is_training(False, session=self.session)
             # Evaluation returns the mean over all batches.
             eval_ops = [self.loss]
             if show_metric and self.metric is not None:
@@ -844,7 +844,7 @@ def get_current_batch_size(feed_batch, dataflow):
 def evaluate_flow(session, ops_to_evaluate, dataflow):
         if not isinstance(ops_to_evaluate, list):
             ops_to_evaluate = [ops_to_evaluate]
-        tflearn.is_training(False, session)
+        cctf.is_training(False, session)
         dataflow.reset()
         dataflow.start()
         res = [0. for i in ops_to_evaluate]
@@ -876,7 +876,7 @@ def evaluate(session, op_to_evaluate, feed_dict, batch_size):
             `float`. op_to_evaluate mean over all batches.
 
         """
-        tflearn.is_training(False, session)
+        cctf.is_training(False, session)
         n_test_samples = len(get_dict_first_element(feed_dict))
         batches = make_batches(n_test_samples, batch_size)
         index_array = np.arange(n_test_samples)

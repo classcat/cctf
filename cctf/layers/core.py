@@ -237,7 +237,7 @@ def dropout(incoming, keep_prob, name="Dropout"):
             else:
                 return tf.nn.dropout(inference, keep_prob)
 
-        is_training = tflearn.get_training_mode()
+        is_training = cctf.get_training_mode()
         inference = tf.cond(is_training, apply_dropout, lambda: inference)
 
     # Track output tensor.
