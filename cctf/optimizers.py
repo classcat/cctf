@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division, print_function, absolute_import
 
 import tensorflow as tf
@@ -278,9 +280,17 @@ class Momentum(Optimizer):
 
     """
 
-    def __init__(self, learning_rate=0.001, momentum=0.9, lr_decay=0.,
-                 decay_step=100, staircase=False, use_locking=False,
-                 name="Momentum"):
+    """
+    呼び出し方
+    momentum = cctf.Momentum(learning_rate=0.005, lr_decay=0.96, decay_step=steps_per_epoch*10)
+    """
+    def __init__(self, learning_rate=0.001,
+                        momentum=0.9,
+                        lr_decay=0.,
+                        decay_step=100,
+                        staircase=False,
+                        use_locking=False,
+                        name="Momentum"):
         super(Momentum, self).__init__(learning_rate, use_locking, name)
         self.momentum = momentum
         self.lr_decay = lr_decay
@@ -340,8 +350,10 @@ class AdaGrad(Optimizer):
 
     """
 
-    def __init__(self, learning_rate=0.001, initial_accumulator_value=0.1,
-                 use_locking=False, name="AdaGrad"):
+    def __init__(self,
+                    learning_rate=0.001,
+                    initial_accumulator_value=0.1,
+                    use_locking=False, name="AdaGrad"):
         super(AdaGrad, self).__init__(learning_rate, use_locking, name)
         self.initial_accumulator_value = initial_accumulator_value
 

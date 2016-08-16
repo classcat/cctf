@@ -431,6 +431,7 @@ class Trainer(object):
 class TrainOp(object):
     """ TrainOp.
 
+    ネットワークを最適化するために使用される演算の集合を表します。
     TrainOp represents a set of operation used for optimizing a network.
 
     A TrainOp is meant to hold all training parameters of an optimizer.

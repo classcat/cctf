@@ -18,10 +18,14 @@ from cctf.helpers.trainer import TrainOp
 
 def regression(incoming, placeholder=None, optimizer='adam',
                loss='categorical_crossentropy', metric='default',
-               learning_rate=0.001, dtype=tf.float32, batch_size=64,
+               learning_rate=0.001,
+               dtype=tf.float32,
+               batch_size=64,
                shuffle_batches=True, to_one_hot=False, n_classes=None,
                trainable_vars=None, restore=True, op_name=None, name=None):
     """ Regression.
+
+    regression 層は、提供された入力に対して regression (linear or logistic) を適用するために使用されます。
 
     The regression layer is used in TFLearn to apply a regression (linear or
     logistic) to the provided input. It requires to specify a TensorFlow
@@ -29,6 +33,7 @@ def regression(incoming, placeholder=None, optimizer='adam',
     loss function 'loss' (which calculate the errors). A metric can also be
     provided, to evaluate the model performance.
 
+    'TrainOp' が生成され、
     A 'TrainOp' is generated, holding all information about the optimization
     process. It is added to TensorFlow collection 'tf.GraphKeys.TRAIN_OPS'
     and later used by TFLearn 'models' classes to perform the training.
@@ -103,12 +108,12 @@ def regression(incoming, placeholder=None, optimizer='adam',
 
     step_tensor = None
     # Building Optimizer
-    if isinstance(optimizer, str):
+    if isinstance(optimizer, str):  # optimizer の文字列指定
         _opt = optimizers.get(optimizer)(learning_rate)
         op_name = op_name if op_name else type(_opt).__name__
         _opt.build()
         optimizer = _opt.get_tensor()
-    elif isinstance(optimizer, optimizers.Optimizer):
+    elif isinstance(optimizer, optimizers.Optimizer):  # optimizer のインスタンス渡し
         op_name = op_name if op_name else type(optimizer).__name__
         if optimizer.has_decay:
             step_tensor = tf.Variable(0., name="Training_step",
