@@ -52,18 +52,10 @@ $ pip install scikit-image
 gym.error.DependencyNotInstalled: No module named atari_py. (HINT: you can install Atari dependencies by running 'pip install gym[atari]'.)
 
 
-gym.error.DependencyNotInstalled: Found neither the ffmpeg nor avconv executables.
-On OS X, you can install ffmpeg via `brew install ffmpeg`.
-On most Ubuntu variants, `sudo apt-get install ffmpeg` should do it. On Ubuntu 14.04,
- however, you'll need to install avconv with `sudo apt-get install libav-tools`.
-
-Unknown encoder 'libx264'
-Unknown encoder 'libx264'
-sudo apt-get install  libfaac-dev
-
-$ ffmpeg -h 2>&1 | grep 'enable-libx264'
-  configuration: --enable-version3 --enable-postproc --enable-libvorbis --enable-libvpx --enable-gpl --enable-libx264
-
+"""
+"""
+1000 steps -> 210
+5000 steps with 4 thread -> 70
 """
 
 import threading
@@ -79,10 +71,11 @@ import tensorflow as tf
 import cctf
 
 # Change that value to test instead of train
-testing = False
-#testing = True
+#testing = False
+testing = True
 # Model path (to load when testing)
-test_model_path = './model'
+test_model_path = './model.ckpt'
+#test_model_path = '/home/masao/cctf.proj/cctf/examples/reinforcement_learning/model/qlearning.ckpt'
 #test_model_path = '/path/to/your/qlearning.tflearn.ckpt'
 
 # Atari game to learn
@@ -95,7 +88,7 @@ n_threads = 8
 #   Training Parameters
 # =============================
 # Max training steps
-TMAX = 100000
+TMAX = 1000
 #TMAX = 80000000
 
 # Current training step
@@ -330,9 +323,7 @@ def actor_learner_thread(thread_id, env, session, graph_ops, num_actions,
 
             # Save model progress
             if t % checkpoint_interval == 0:
-                saver.save(session, "./model/model.ckpt", global_step=t)
-                # saver.save(session, "./model/qlearning.ckpt", global_step=t)
-
+                saver.save(session, "./model/qlearning.ckpt", global_step=t)
 
             # Print end of episode stats
             if terminal:
@@ -463,7 +454,12 @@ def evaluation(session, graph_ops, saver):
     """
     Evaluate a model.
     """
-    saver.restore(session, test_model_path)
+    ckpt = tf.train.get_checkpoint_state('./model')
+    if ckpt and ckpt.model_checkpoint_path:
+        print (ckpt.model_checkpoint_path)
+    else:
+        print ("exit")
+    saver.restore(session, ckpt.model_checkpoint_path)
     print("Restored model weights from ", test_model_path)
     monitor_env = gym.make(game)
     monitor_env.monitor.start("qlearning/eval")
